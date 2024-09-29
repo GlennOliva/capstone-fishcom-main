@@ -163,15 +163,25 @@ const Add_Category: React.FC = () => {
                     <h1 style={{ fontSize: '12px', margin: 0 }}>Welcome: {adminProfile.first_name}</h1>
                   </li>
                   <li style={{ marginBottom: '5px' }}>
-                    <Link to="/admin_profile" style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
-                      <i className='bx bxs-user-circle ' style={{ marginRight: '5px' }}></i> Profile
+                    <Link to={`/admin_profile/${localStorage.getItem('admin_id')}`} style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
+                        <i className='bx bxs-user-circle' style={{ marginRight: '5px' }}></i> Profile
                     </Link>
-                  </li>
-                  <li>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
-                      <i className='bx bxs-log-out-circle' style={{ marginRight: '5px' }}></i> Logout
-                    </a>
-                  </li>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}
+                    onClick={() => {
+                      // Clear local storage
+                      localStorage.clear();
+                      
+                      // Redirect to the login page or another account page
+                      window.location.href = '/login'; // Adjust this path as necessary
+                    }}
+                  >
+                    <i className='bx bxs-log-out-circle' style={{ marginRight: '5px' }}></i> Logout
+                  </a>
+                </li>
                 </ul>
               </>
             )}

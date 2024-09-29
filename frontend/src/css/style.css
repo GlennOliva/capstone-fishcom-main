@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+  
 }
 :root{
     --body-color: #F0EEF6;
@@ -18,6 +19,7 @@
 }
 body{
     background: var(--body-color) !important; 
+    
 }
 
 /* ----------------CSS for navbar start--------------- */
@@ -102,17 +104,67 @@ body{
     align-items: center;   /* Center align vertically */
     position: relative;    /* Positioning for absolute icon */
     width: 100%;
-    margin-top: 10%;
+    margin-top: 30%;
   }
 
   .input-container1 {
-    display: flex;         /* Use flexbox to align elements */
-    align-items: center;   /* Center align vertically */
-    position: relative;    /* Positioning for absolute icon */
-    width: 80%;
-    margin-left: 9%;
-    margin-bottom: 5%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 90%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
+    margin-left: -40%;
   }
+
+  
+  .input-container2 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 90%; /* Ensure the width fits the container */
+    margin: 10px 0; /* Vertical margin for spacing */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 5px; /* Reduce the padding for a more compact look */
+    margin-top: 10px; /* Reduced margin for better spacing */
+    margin-right: 50%;
+}
+
+  
+  .reply-input {
+    flex-grow: 1;
+    padding: 12px 45px 12px 15px; /* Add extra space for the send icon */
+    font-size: 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    height: 40px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Slight inner shadow */
+  }
+  
+  .reply-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+  }
+  
+  .send-icon {
+    position: absolute;
+    right: 20px; /* Place it inside the input area */
+    cursor: pointer;
+    font-size: 20px;
+    color: #007bff;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .send-icon:hover {
+    color: #0056b3; /* Darken the icon color on hover */
+  }
+  
   
   
   .comment-user-icon {
@@ -245,18 +297,61 @@ body{
   
 
   
-.container{
-    display: flex;
-    justify-content: space-between;
-    padding: 13px 5%;
-    background-color: #F0EEF6 !important;
+  .parent-container {
+    width: 100%; /* Full width of the parent */
+    display: flex; /* Use flex to center the container */
+    justify-content: center; /* Center the container */
+    padding: 0 2%; /* Add some padding on the sides */
 }
+
+.container {
+    display: flex;
+    justify-content: space-between; /* Space between child elements */
+    padding: 13px 5%; /* Padding inside the container */
+    background-color: #F0EEF6 !important; /* Background color */
+    max-width: 2500px; /* Maximum width */
+    width: 100%; /* Full width of the parent container */
+    box-sizing: border-box; /* Include padding in width calculation */
+    margin: 0 auto; /* Center the container */
+}
+
+/* Ensure that the parent container has a specific width */
+@media (max-width: 768px) {
+    .parent-container {
+        padding: 0 10%; /* Adjust padding for smaller screens */
+    }
+
+    .container {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .container > * {
+        width: 100%; /* Full width for child elements */
+        margin-bottom: 10px; /* Space between child elements */
+    }
+
+    .container > *:last-child {
+        margin-bottom: 0; /* No bottom margin for last child */
+    }
+}
+
+/* Optional: Tablet Styles */
+@media (max-width: 1024px) {
+    .parent-container {
+        padding: 0 5%; /* Adjust padding for tablet screens */
+    }
+}
+
+
+
 /* ----------------CSS for left sidebar start------------------------------- */
-.sidebar-left{
+.sidebar-left1{
     align-self: flex-start;
     position: sticky;
-    top: 70px;
+    top: 100px;
     flex-basis: 25%;
+    margin-left: -50% ;
 }
 .imp-links{
     border-bottom: 1px solid #ccc;
@@ -479,7 +574,9 @@ body{
 
 /* ----------------------CSS for main content Start------------------------- */
 .main-content{
-    flex-basis: 47%;
+    flex-basis: 45%;
+    margin-left: 12%;
+
 }
 .story-gellary{
     display: flex;
@@ -536,12 +633,21 @@ body{
     border: 0;
     width: 35px;
 }
+.write-post-container1{
+    width: 100%;
+    background: var(--bg-color);
+    border-radius: 6px;
+    padding: 20px;
+    color: #626262;
+    height: 80vh;
+}
 .write-post-container{
     width: 100%;
     background: var(--bg-color);
     border-radius: 6px;
     padding: 20px;
     color: #626262;
+
 }
 .user-profile{
     display: flex;
@@ -658,7 +764,7 @@ post-row {
     font-size: 16px;
   }
   
-  .like-reply, .comment-reply, .share-reply {
+ .like-reply1 .comment-reply, .share-reply {
     color: #000;
     text-decoration: none !important;
     display: flex;
@@ -667,16 +773,42 @@ post-row {
     padding: 10px;
     border-radius: 8px;
     transition: background-color 0.3s ease;
-  }
-  
-  .like-reply:hover, .comment-reply:hover, .share-reply:hover {
+    flex: 1; /* Allow the elements to grow and fill available space */
+}
+
+.like-reply:hover, .comment-reply:hover, .share-reply:hover {
     background-color: #F0EEF6;
-  }
-  
-  .like-reply i, .comment-reply i, .share-reply i {
+}
+
+.like-reply i, .comment-reply i, .share-reply i {
     margin-right: 8px;
     font-size: 18px;
-  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .like-reply, .comment-reply, .share-reply {
+        padding: 8px; /* Decrease padding for smaller screens */
+        font-size: 16px; /* Adjust font size for readability */
+    }
+
+    .like-reply i, .comment-reply i, .share-reply i {
+        font-size: 16px; /* Adjust icon size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .like-reply, .comment-reply, .share-reply {
+        padding: 6px; /* Further decrease padding for very small screens */
+        font-size: 10px; /* Adjust font size for smaller screens */
+    }
+
+    .like-reply i, .comment-reply i, .share-reply i {
+        font-size: 10px; /* Adjust icon size for smaller screens */
+        margin-right: 2px; /* Decrease space between icon and text */
+    }
+}
+
 .activity-icons div{
     display: inline-flex;
     align-items: center;
@@ -785,6 +917,25 @@ post-row {
     background: #0a0a0a;
 
 }
+
+.sidebar-left {
+    position: fixed; /* Make it fixed to the left of the viewport */
+    left: 0;
+    top: 0;
+    width: 250px; /* Adjust the width according to your design */
+    height: 100%; /* Full height */
+    background: #fff; /* Background color */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Optional shadow for effect */
+    transform: translateX(-100%); /* Initially hide off-screen */
+    transition: transform 0.3s ease; /* Transition for smooth opening */
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* When sidebar is open */
+  .sidebar-left.active {
+    transform: translateX(0); /* Bring it into view */
+  }
+  
 /* ----------------------CSS for main content end------------------------- */
 /* -------------------------CSS for content end--------------------- */
 
@@ -824,13 +975,7 @@ post-row {
         width: 30px;
         border-width: 3px;
     }
-    .story p{
-        font-size: 10px;
-    }
-    .story.story1 img{
-        width: 25px;
-        bottom: 30px;
-    }
+    
     .add-post-links a{
         margin-right: 12px;
         font-size: 9px;

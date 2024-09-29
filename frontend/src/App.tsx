@@ -37,6 +37,7 @@ import { Seller_Register } from './credentials/Seller_Register'
 import Manage_Order from './admin/Manage_Order'
 import Edit_Order from './admin/Edit_Order'
 import TermsCondition from './credentials/TermsCondition'
+import UserProfile from './components/userProfile'
 
 
 
@@ -54,6 +55,14 @@ const App = () => {
             <Footer />
           </>
         } />
+
+<Route path='/user_profile/:id' element={
+          <>
+            <Navbar />
+          <UserProfile/>
+          <Footer />
+          </>
+        }/>
 
         <Route path="/ecommerce" element={
           <>
@@ -112,7 +121,7 @@ const App = () => {
 <Route path='/Register' element={<Register/>} />
 
 
-<Route path="/profile_settings" element={
+<Route path="/profile_settings/:id" element={
           <>
             <Navbar />
             <ProfileSettings/>
@@ -167,6 +176,9 @@ const App = () => {
         }/>
 
 
+  
+
+
 <Route path='/manage_user' element={
           <>
           <Manage_User/>
@@ -188,7 +200,7 @@ const App = () => {
         }/>
 
 
-<Route path='/admin_profile' element={
+<Route path='/admin_profile/:id' element={
           <>
           <Admin_Profile/>
           </>

@@ -22,6 +22,9 @@ export const Register = () => {
     gender: string;
     profile_pic: File | null; // Keep this for form state
     terms: boolean;
+    age: string;
+    bio: string;
+    address: string;
   }>( {
     initialValues: {
       firstName: '',
@@ -30,6 +33,9 @@ export const Register = () => {
       password: '',
       birthdate: '',
       gender: '',
+      bio: '',
+      address: '',
+      age: '',
       profile_pic: null,
       terms: false,
     },
@@ -37,7 +43,17 @@ export const Register = () => {
       firstName: Yup.string().required('First Name is required'),
       lastName: Yup.string().required('Last Name is required'),
       email: Yup.string().email('Invalid email format').required('Email is required'),
-      password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+      password: Yup.string()
+      .min(8, 'Password must be at least 8 characters')
+      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one special character')
+      .required('Password is required'),
+      age: Yup.number()
+      .required('Age is required')
+      .min(0, 'Age cannot be negative')
+      .max(120, 'Please enter a valid age'),     
+      bio: Yup.string().required('Bio is required'),
+      address: Yup.string().required('Address is required'),
       birthdate: Yup.date().required('Birthdate is required').nullable(),
       gender: Yup.string().required('Gender is required'),
       terms: Yup.bool().oneOf([true], 'You must accept the terms and conditions'),
@@ -153,74 +169,152 @@ const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: stri
             </div>
           </div>
 
-          <label htmlFor="email">Enter email address</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter email address"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div style={{ color: 'red' }}>{formik.errors.email}</div>
-          ) : null}
+          <div style={{ display: 'flex', gap: '10px' }}>
+  <div style={{ flex: 1 }}>
+    <label htmlFor="email">Enter email address</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      placeholder="Enter email address"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.email}
+    />
+    {formik.touched.email && formik.errors.email ? (
+      <div style={{ color: 'red' }}>{formik.errors.email}</div>
+    ) : null}
+  </div>
 
-          <label htmlFor="password">Enter password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div style={{ color: 'red' }}>{formik.errors.password}</div>
-          ) : null}
+  <div style={{ flex: 1 }}>
+    <label htmlFor="address">Enter Address</label>
+    <input
+      type="text"
+      id="address"
+      name="address"
+      placeholder="Enter Address"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.address}
+    />
+    {formik.touched.address && formik.errors.address ? (
+      <div style={{ color: 'red' }}>{formik.errors.address}</div>
+    ) : null}
+  </div>
+</div>
 
-          <label htmlFor="birthdate">Birthdate</label>
-          <input
-  type="date"
-  id="birthdate"
-  name="birthdate"
-  onChange={formik.handleChange}
-  onBlur={formik.handleBlur}
-  value={formik.values.birthdate || ''}  // Convert null to empty string
-/>
 
-          {formik.touched.birthdate && formik.errors.birthdate ? (
-            <div style={{ color: 'red' }}>{formik.errors.birthdate}</div>
-          ) : null}
+<div style={{ display: 'flex', gap: '10px' }}>
+  {/* Password Field */}
+  <div style={{ flex: 1 }}>
+    <label htmlFor="password">Enter password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      placeholder="Enter password"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.password}
+    />
+    {formik.touched.password && formik.errors.password ? (
+      <div style={{ color: 'red' }}>{formik.errors.password}</div>
+    ) : null}
+  </div>
 
-          <label htmlFor="gender">Gender</label>
-          <input
-            type="text"
-            id="gender"
-            name="gender"
-            placeholder="Enter gender"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.gender}
-          />
-          {formik.touched.gender && formik.errors.gender ? (
-            <div style={{ color: 'red' }}>{formik.errors.gender}</div>
-          ) : null}
+  {/* Age Field */}
+  <div style={{ flex: 1 }}>
+    <label htmlFor="age">Enter Age</label>
+    <input
+      type="number"
+      id="age"
+      name="age"
+      placeholder="Enter Age"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.age}
+    />
+    {formik.touched.age && formik.errors.age ? (
+      <div style={{ color: 'red' }}>{formik.errors.age}</div>
+    ) : null}
+  </div>
+</div>
 
-          <label htmlFor="profile_pic">Profile picture</label>
-          <input
-    type="file"
-    name="profile_pic" // Match this with the Formik field name
-    id="profile_pic"
-    onChange={(event) => {
+
+
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+  <div style={{ flex: 1 }}>
+    <label htmlFor="birthdate">Birthdate</label>
+    <input
+      type="date"
+      id="birthdate"
+      name="birthdate"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.birthdate || ''} // Convert null to empty string
+    />
+    {formik.touched.birthdate && formik.errors.birthdate ? (
+      <div style={{ color: 'red' }}>{formik.errors.birthdate}</div>
+    ) : null}
+  </div>
+
+  <div style={{ flex: 1 }}>
+    <label htmlFor="gender">Gender</label>
+    <input
+      type="text"
+      id="gender"
+      name="gender"
+      placeholder="Enter gender"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.gender}
+    />
+    {formik.touched.gender && formik.errors.gender ? (
+      <div style={{ color: 'red' }}>{formik.errors.gender}</div>
+    ) : null}
+  </div>
+</div>
+
+
+<div style={{ display: 'flex', gap: '10px' }}>
+  {/* Profile Picture Upload */}
+  <div style={{ flex: 1 }}>
+    <label htmlFor="profile_pic">Profile Picture</label>
+    <input
+      type="file"
+      name="profile_pic" 
+      id="profile_pic"
+      onChange={(event) => {
         const files = event.currentTarget.files;
         if (files && files.length > 0) {
-            formik.setFieldValue("profile_pic", files[0]); // Set profile_pic
+          formik.setFieldValue("profile_pic", files[0]); // Set profile_pic value in Formik
         }
-    }}
-/>
+      }}
+    />
+    {formik.touched.profile_pic && formik.errors.profile_pic ? (
+      <div style={{ color: 'red' }}>{formik.errors.profile_pic}</div>
+    ) : null}
+  </div>
+
+  {/* Bio Input Field */}
+  <div style={{ flex: 1 }}>
+    <label htmlFor="bio">Bio</label>
+    <input
+      type="text"
+      id="bio"
+      name="bio"
+      placeholder="Enter bio"
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      value={formik.values.bio}
+    />
+    {formik.touched.bio && formik.errors.bio ? (
+      <div style={{ color: 'red' }}>{formik.errors.bio}</div>
+    ) : null}
+  </div>
+</div>
+
 
           <div className="checkbox-container">
             <input

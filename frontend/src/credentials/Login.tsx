@@ -20,12 +20,12 @@ const Login = () => {
             // If login is successful, redirect based on the role
             if (response.status === 200) {
                 if (role === 'admin') {
-                    // Store admin_id in local storage
+                    localStorage.removeItem('user_id'); // Clear previous user ID
                     localStorage.setItem('admin_id', response.data.admin.id);
                     console.log('Admin ID:', response.data.admin.id); // Log admin ID
                     navigate('/dashboard');
                 } else {
-                    // Store user_id in local storage
+                    localStorage.removeItem('admin_id'); // Clear previous admin ID
                     localStorage.setItem('user_id', response.data.user.id);
                     console.log('User ID:', response.data.user.id); // Log user ID
                     navigate('/');
@@ -35,6 +35,7 @@ const Login = () => {
             setErrorMessage(error.response?.data?.error || 'Login failed');
         }
     };
+    
     
 
     return (

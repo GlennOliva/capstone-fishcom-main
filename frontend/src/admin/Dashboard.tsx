@@ -8,6 +8,7 @@ import 'chartjs-adapter-date-fns';
 import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import Sidebar from '../admin/Sidebar'
+import axios from 'axios';
 
 // Register Chart.js components
 ChartJS.register(
@@ -161,20 +162,44 @@ const Dashboard: React.FC = () => {
     }
   };
   
-  const chartComparisonProducts: ChartData<'bar'> = {
-    labels: ['Betta Splenders', 'Guppy', 'Gold Fish', 'Mud Fish'],
-    datasets: [
-      {
-        label: 'Count',
-        data: [234, 1500, 300, 400],
-        backgroundColor: ['#33C1FF', '#FF5733'],
-        borderColor: ['#33C1FF', '#FF5733'],
-        borderWidth: 1
-      }
-    ]
-  };
-  
-  const chartComparisonOptionsProducts: ChartOptions<'bar'> = {
+  const [categoryData, setCategoryData] = useState<ChartData<'bar'>>({
+    labels: [],
+    datasets: [{
+      label: 'Count',
+      data: [],
+      backgroundColor: [],
+      borderColor: [],
+      borderWidth: 1
+    }]
+  });
+
+  useEffect(() => {
+    axios.get('http://localhost:8081/no_products')
+      .then(response => {
+        const labels = response.data.map((item: { category_name: any; }) => item.category_name);  // Extract category names
+        const data = response.data.map((item: { count: any; }) => item.count);            // Extract counts
+
+        // Generate random colors for each category dynamically
+        const backgroundColor = labels.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`);
+        const borderColor = backgroundColor;
+
+        setCategoryData({
+          labels: labels,
+          datasets: [{
+            label: 'Count',
+            data: data,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            borderWidth: 1
+          }]
+        });
+      })
+      .catch(error => {
+        console.error('There was an error fetching the category data:', error);
+      });
+  }, []);
+
+  const chartComparisonOptionsCategories: ChartOptions<'bar'> = {
     responsive: true,
     plugins: {
       legend: {
@@ -192,16 +217,16 @@ const Dashboard: React.FC = () => {
       x: {
         title: {
           display: true,
-          text: 'Products'
+          text: 'Categories'
         },
-        stacked: true,
+        stacked: false,
       },
       y: {
         title: {
           display: true,
           text: 'Count'
         },
-        stacked: true,
+        stacked: false,
       }
     }
   };
@@ -227,6 +252,39 @@ const Dashboard: React.FC = () => {
       } else {
           console.log("Admin ID not found in local storage");
       }
+  }, []);
+
+
+  const [counts, setCounts] = useState({
+    userCount: 0,
+    productCount: 0,
+    orderCount: 0,
+    categoryCount: 0,
+  });
+
+  useEffect(() => {
+    // Fetching all the counts from the server
+    const fetchCounts = async () => {
+      try {
+        const [users, products, orders, categories] = await Promise.all([
+          axios.get('http://localhost:8081/no_user'),
+          axios.get('http://localhost:8081/no_product'),
+          axios.get('http://localhost:8081/no_order'),
+          axios.get('http://localhost:8081/no_category')
+        ]);
+        
+        setCounts({
+          userCount: users.data.user_count,
+          productCount: products.data.product_count,
+          orderCount: orders.data.order_count,
+          categoryCount: categories.data.category_count,
+        });
+      } catch (error) {
+        console.error("Error fetching counts", error);
+      }
+    };
+
+    fetchCounts();
   }, []);
   
 
@@ -269,15 +327,25 @@ const Dashboard: React.FC = () => {
                     <h1 style={{ fontSize: '12px', margin: 0 }}>Welcome: {adminProfile.first_name}</h1>
                   </li>
                   <li style={{ marginBottom: '5px' }}>
-                    <Link to="/admin_profile" style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
-                      <i className='bx bxs-user-circle ' style={{ marginRight: '5px' }}></i> Profile
+                    <Link to={`/admin_profile/${localStorage.getItem('admin_id')}`} style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
+                        <i className='bx bxs-user-circle' style={{ marginRight: '5px' }}></i> Profile
                     </Link>
-                  </li>
-                  <li>
-                    <a href="#" style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
-                      <i className='bx bxs-log-out-circle' style={{ marginRight: '5px' }}></i> Logout
-                    </a>
-                  </li>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}
+                    onClick={() => {
+                      // Clear local storage
+                      localStorage.clear();
+                      
+                      // Redirect to the login page or another account page
+                      window.location.href = '/login'; // Adjust this path as necessary
+                    }}
+                  >
+                    <i className='bx bxs-log-out-circle' style={{ marginRight: '5px' }}></i> Logout
+                  </a>
+                </li>
                 </ul>
               </>
             )}
@@ -292,42 +360,43 @@ const Dashboard: React.FC = () => {
             <li><a href="#" className="active">Dashboard</a></li>
           </ul>
           <div className="info-data">
-            <div className="card">
-              <div className="head">
-                <div>
-                  <h2>1500</h2>
-                  <p>No of Users</p>
-                </div>
-                <i className='bx bx-user icon'></i>
-              </div>
-            </div>
-            <div className="card">
-					<div className="head">
-						<div>
-							<h2>1500</h2>
-							<p>No of Products</p>
-						</div>
-						<i className='bx bx-store-alt icon'></i>
-					</div>
-				</div>
-				<div className="card">
-					<div className="head">
-						<div>
-							<h2>234</h2>
-							<p>No of Orders</p>
-						</div>
-						<i className='bx bx-shopping-bag icon down'></i>
-					</div>
-				</div>
-				<div className="card">
-					<div className="head">
-						<div>
-							<h2>465</h2>
-							<p>No of Categories</p>
-						</div>
-						<i className='bx bx-category icon'></i>
-					</div>
-				</div>
+          <div className="card">
+        <div className="head">
+          <div>
+            <h2>{counts.userCount}</h2>
+            <p>No of Users</p>
+          </div>
+          <i className='bx bx-user icon'></i>
+        </div>
+      </div>
+      <div className="card">
+        <div className="head">
+          <div>
+            <h2>{counts.productCount}</h2>
+            <p>No of Products</p>
+          </div>
+          <i className='bx bx-store-alt icon'></i>
+        </div>
+      </div>
+      <div className="card">
+        <div className="head">
+          <div>
+            <h2>{counts.orderCount}</h2>
+            <p>No of Orders</p>
+          </div>
+          <i className='bx bx-shopping-bag icon down'></i>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="head">
+          <div>
+            <h2>{counts.categoryCount}</h2>
+            <p>No of Categories</p>
+          </div>
+          <i className='bx bx-category icon'></i>
+        </div>
+      </div>
             
           </div>
 
@@ -348,9 +417,9 @@ const Dashboard: React.FC = () => {
 
   <div className="content-data">
     <div className="chart">
-      <Bar data={chartComparisonProducts} options={chartComparisonOptionsProducts} />
+    <Bar data={categoryData} options={chartComparisonOptionsCategories} />
     </div>
-    <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Highest Products Sales Per Month</h3>
+    <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Comparison of Three Categories</h3>
   </div>
 </div>
 
